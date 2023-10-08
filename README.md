@@ -6,6 +6,10 @@
 
 每个接口生成一个 `namespace` (用于分组,避免重名), 包含 `Params`, `Response`, 和一些额外 `interface`.
 
+## 预览
+
+![img](assets/images/preview.png)
+
 ## Config
 
 | 名称 | 说明 | 类型 | 默认 |

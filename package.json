@@ -277,5 +277,18 @@
     "typescript": "^4.4.4",
     "vscode-test": "^1.6.1"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "author": {
+    "name": "lyu",
+    "email": "174577063@qq.com"
+  },
+  "homepage": "https://github.com/lx11573/ex-swagger-totypes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lx11573/ex-swagger-totypes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lx11573/ex-swagger-totypes/issues",
+    "email": "174577063@qq.com"
+  }
 }
