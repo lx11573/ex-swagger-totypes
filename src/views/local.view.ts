@@ -108,11 +108,15 @@ export class ViewLocal extends BaseTreeProvider<LocalItem> {
         /^[\s]*\/\*\*(.*?)\*\/.*declare\s+namespace\s+([^\s\n]+).+$/s,
         '$1* @namespace $2\n'
       )
-
+      const lineStr = fileStr.replace(/\n/g, '')
+      const hasRequestParams = lineStr.includes('interface Request {')
+      const hasResponseParams = lineStr.includes('interface Response {')
       const headerInfo: FileHeaderInfo = {
         fileName: fileName.replace(/^.+\/(.+?)(\.d)?\.{.+}$/, '$1'),
         filePath: fileName,
         ext: fileName.replace(/^.+\.(.+)$/, '$1'),
+        requestParams: hasRequestParams,
+        responseParams: hasResponseParams,
       }
 
       headerStr.replace(/\*\s*@([^\s]+)[^\S\n]*([^\n]*?)\n/g, (_, key, value) => {

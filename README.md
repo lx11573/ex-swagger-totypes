@@ -1,4 +1,6 @@
-# swagger-to-types README
+# ex-swagger-to-types README
+
+> 修改于 [swagger-to-types](https://github.com/lanten/swagger-to-types)
 
 将 Swagger JSON 导出为 Typescript interface
 
@@ -131,6 +133,8 @@ module.exports = { paramsItem }
  *  update?: string
  *  ignore?: boolean
  *  savePath?: string
+ *  requestParams?: boolean
+ *  responseParams?: boolean
  * }} fileInfo
  * @returns
  */

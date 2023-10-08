@@ -15,6 +15,7 @@ export interface TemplateBaseType {
   response?: (params: TreeInterface) => string
   responseItem?: (item: TreeInterfacePropertiesItem, params: TreeInterface) => string
   copyRequest?: (params: FileHeaderInfo) => string | string[]
+  ignoreOriginalRef?: (originalRef: string) => boolean
 }
 
 export let templateConfig: TemplateBaseType = {}

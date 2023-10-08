@@ -1,6 +1,6 @@
 import { OpenAPIV2 } from 'openapi-types'
 
-import { toCamel, randomId, SwaggerJsonUrlItem, log, getValueByPath, config } from '../tools'
+import { toCamel, randomId, SwaggerJsonUrlItem, log, getValueByPath, config, templateConfig } from '../tools'
 
 export function parseSwaggerJson(
   swaggerJson: OpenAPIV2.Document,
@@ -148,7 +148,6 @@ export function parseSwaggerJson(
     for (const path in paths) {
       const pathItem = paths[path]
       const pathItemKeys = Object.keys(pathItem)
-
       pathItemKeys.forEach((method) => {
         parseMethodItem(path, pathItem as any, method, pathItemKeys.length > 1)
       })
@@ -224,7 +223,10 @@ function getSwaggerJsonRef(schema?: OpenAPIV2.SchemaObject, definitions?: OpenAP
         }
 
         if (schema && (schema.originalRef != originalRef || schema.$ref != $ref)) {
-          obj.item = getSwaggerJsonRef(schema, definitions)
+          const ignore = templateConfig.ignoreOriginalRef ? templateConfig.ignoreOriginalRef(schema.originalRef) : false
+          if (!ignore) {
+            obj.item = getSwaggerJsonRef(schema, definitions)
+          }
         }
       }
 

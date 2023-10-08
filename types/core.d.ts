@@ -91,5 +91,9 @@ declare global {
     ignore?: boolean
     /** 接口保存目录 */
     savePath?: string
+    /** 是否存在请求参数 */
+    requestParams?: boolean
+    /** 是否存在响应参数 */
+    responseParams?: boolean
   }
 }
