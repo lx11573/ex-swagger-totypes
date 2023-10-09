@@ -178,6 +178,7 @@ function parseHeaderInfo(data: TreeInterface): string[] {
     ` * @base     ${data.basePath || ''}`,
     ` * @path     ${data.path}`,
     ` * @method   ${data.method.toUpperCase()}`,
+    ` * @isBody   ${data.isBody}`,
     ` * @savePath ${data.savePath}`,
     ` * @update   ${new Date().toLocaleString()}`,
     ' */',

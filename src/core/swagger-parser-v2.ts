@@ -49,12 +49,14 @@ export function parseSwaggerJson(
       .replace(/[\[\]<>(){|}\*]/g, '$')
 
     let params: any[] = []
+    let isBody = false
     if (!parameters || !parameters.length) {
       params = []
     } else {
       const bodyIndex = parameters.findIndex((x: any) => x.in === 'body')
 
       if (bodyIndex !== -1) {
+        isBody = true
         const paramsBody = parameters[bodyIndex]
         const paramsSource = paramsBody.schema && getSwaggerJsonRef(paramsBody.schema, definitions)
 
@@ -113,6 +115,7 @@ export function parseSwaggerJson(
       path,
       pathName,
       fileName,
+      isBody,
       savePath: configItem.savePath || config.extConfig.savePath,
       ...item,
     }

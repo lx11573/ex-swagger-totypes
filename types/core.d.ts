@@ -66,6 +66,7 @@ declare global {
     fileName: string
     operationId: string
     savePath: string
+    isBody: boolean
     // produces: string[]
     // deprecated: boolean
   }

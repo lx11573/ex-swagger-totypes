@@ -121,6 +121,9 @@ export class ViewLocal extends BaseTreeProvider<LocalItem> {
 
       headerStr.replace(/\*\s*@([^\s]+)[^\S\n]*([^\n]*?)\n/g, (_, key, value) => {
         headerInfo[key] = value || true
+        if (key === 'isBody') {
+          headerInfo[key] = value === 'false' ? false : true
+        }
         return ''
       })
 
