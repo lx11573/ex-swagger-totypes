@@ -50,7 +50,7 @@ export function parseSwaggerJson(
 
     let params: any[] = []
     let isBody = false
-    let isArray = false
+    let isBodyArray = false
     if (!parameters || !parameters.length) {
       params = []
     } else {
@@ -59,10 +59,10 @@ export function parseSwaggerJson(
       if (bodyIndex !== -1) {
         isBody = true
         const paramsBody = parameters[bodyIndex]
-        isArray = paramsBody?.schema?.type === 'array'
+        isBodyArray = paramsBody?.schema?.type === 'array'
         const paramsSource = paramsBody.schema && getSwaggerJsonRef(paramsBody.schema, definitions)
-
         if (paramsBody?.schema?.type && !paramsSource?.properties?.length) {
+          isBodyArray = false
           paramsSource?.properties?.push({
             name: '____body_root_param____', // TAG 根级参数处理
             description: paramsBody.description,
@@ -118,7 +118,7 @@ export function parseSwaggerJson(
       pathName,
       fileName,
       isBody,
-      isArray,
+      isBodyArray,
       savePath: configItem.savePath || config.extConfig.savePath,
       ...item,
     }

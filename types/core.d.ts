@@ -67,7 +67,7 @@ declare global {
     operationId: string
     savePath: string
     isBody: boolean
-    isArray: boolean
+    isBodyArray: boolean
     // produces: string[]
     // deprecated: boolean
   }
