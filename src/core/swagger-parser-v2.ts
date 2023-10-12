@@ -50,6 +50,7 @@ export function parseSwaggerJson(
 
     let params: any[] = []
     let isBody = false
+    let isArray = false
     if (!parameters || !parameters.length) {
       params = []
     } else {
@@ -58,6 +59,7 @@ export function parseSwaggerJson(
       if (bodyIndex !== -1) {
         isBody = true
         const paramsBody = parameters[bodyIndex]
+        isArray = paramsBody?.schema?.type === 'array'
         const paramsSource = paramsBody.schema && getSwaggerJsonRef(paramsBody.schema, definitions)
 
         if (paramsBody?.schema?.type && !paramsSource?.properties?.length) {
@@ -116,6 +118,7 @@ export function parseSwaggerJson(
       pathName,
       fileName,
       isBody,
+      isArray,
       savePath: configItem.savePath || config.extConfig.savePath,
       ...item,
     }

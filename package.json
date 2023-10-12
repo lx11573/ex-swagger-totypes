@@ -2,7 +2,7 @@
   "name": "ex-swagger-to-types",
   "displayName": "ExSwagger To Types",
   "description": "VSCode Extension: Transform swagger-api to typescript interface.",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "icon": "assets/app-icon.png",
   "publisher": "longago",
   "engines": {
