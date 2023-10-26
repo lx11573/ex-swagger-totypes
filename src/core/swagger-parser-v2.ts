@@ -60,7 +60,8 @@ export function parseSwaggerJson(
         isBody = true
         const paramsBody = parameters[bodyIndex]
         isBodyArray = paramsBody?.schema?.type === 'array'
-        const paramsSource = paramsBody.schema && getSwaggerJsonRef(paramsBody.schema, definitions)
+        const parentRef: string[] = []
+        const paramsSource = paramsBody.schema && getSwaggerJsonRef(paramsBody.schema, definitions, parentRef)
         if (paramsBody?.schema?.type && !paramsSource?.properties?.length) {
           isBodyArray = false
           paramsSource?.properties?.push({
@@ -164,13 +165,15 @@ export function parseSwaggerJson(
 
   return res
 }
-
 // 递归获取 ref
-function getSwaggerJsonRef(schema?: OpenAPIV2.SchemaObject, definitions?: OpenAPIV2.DefinitionsObject): any {
+function getSwaggerJsonRef(
+  schema?: OpenAPIV2.SchemaObject,
+  definitions?: OpenAPIV2.DefinitionsObject,
+  parentRef?: string[]
+): any {
   const { items, originalRef } = schema || {}
   let { $ref } = schema || {}
   let refData: any = {}
-
   if (items) {
     const {
       // originalRef: itemOriginalRef,
@@ -213,7 +216,10 @@ function getSwaggerJsonRef(schema?: OpenAPIV2.SchemaObject, definitions?: OpenAP
       }
 
       if ((val.originalRef && val.originalRef != originalRef) || (val.$ref && val.$ref != $ref)) {
-        obj.item = getSwaggerJsonRef(val, definitions)
+        if (!parentRef!.includes(val.originalRef)) {
+          parentRef!.push(val.originalRef)
+          obj.item = getSwaggerJsonRef(val, definitions, parentRef)
+        }
       }
 
       if (val.items) {
@@ -231,7 +237,11 @@ function getSwaggerJsonRef(schema?: OpenAPIV2.SchemaObject, definitions?: OpenAP
         if (schema && (schema.originalRef != originalRef || schema.$ref != $ref)) {
           const ignore = templateConfig.ignoreOriginalRef ? templateConfig.ignoreOriginalRef(schema.originalRef) : false
           if (!ignore) {
-            obj.item = getSwaggerJsonRef(schema, definitions)
+            const ref = schema.originalRef != originalRef ? schema.originalRef : schema.$ref
+            if (!parentRef!.includes(ref)) {
+              parentRef!.push(ref)
+              obj.item = getSwaggerJsonRef(schema, definitions, parentRef)
+            }
           }
         }
       }
@@ -239,7 +249,6 @@ function getSwaggerJsonRef(schema?: OpenAPIV2.SchemaObject, definitions?: OpenAP
       propertiesList.push(obj)
     }
   }
-
   return Object.assign({}, refData, {
     properties: propertiesList,
     item: propertiesList,

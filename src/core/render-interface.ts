@@ -41,7 +41,14 @@ function parseNameSpace(item: TreeInterface, content: string[], indentation = 0)
 
 /** 解析参数接口 */
 function parseParams(data: TreeInterface, indentation = 0): string[] {
-  const res = parseProperties('Params', templateConfig?.params?.(data), Object.assign(data), data.params, indentation)
+  const res = parseProperties(
+    'Params',
+    templateConfig?.params?.(data),
+    Object.assign(data),
+    data.params,
+    indentation,
+    {}
+  )
   // res.pop() // 删除多余空行
   return res
 }
@@ -53,7 +60,8 @@ function parseResponse(data: TreeInterface, indentation = 0): string[] {
     templateConfig?.response?.(data),
     Object.assign(data),
     data.response,
-    indentation
+    indentation,
+    {}
   )
   // res.pop() // 删除多余空行
   return res
@@ -65,7 +73,8 @@ function parseProperties(
   interfaceName: string | undefined,
   data: TreeInterface,
   properties: TreeInterfacePropertiesItem | TreeInterfacePropertiesItem[] | string | undefined,
-  indentation = 0
+  indentation = 0,
+  parentNames: Record<string, string>
 ): string[] {
   const indentationSpace = handleIndentation(indentation) // 一级缩进
   const indentationSpace2 = handleIndentation(indentation + 1) // 二级缩进
@@ -92,10 +101,14 @@ function parseProperties(
     content = properties.map((v) => {
       let type = handleType(v.type)
       if (v.item) {
-        type = `${interfaceName}${toUp(v.name)}`
-        if (v.type === 'array') type = `${type}Item`
-
-        interfaceList.push(...parseProperties(interfaceType, type, data, v.item, indentation))
+        if (parentNames[v.name]) {
+          type = parentNames[v.name]
+        } else {
+          type = `${interfaceName}${toUp(v.name)}`
+          if (v.type === 'array') type = `${type}Item`
+          parentNames[v.name] = type
+          interfaceList.push(...parseProperties(interfaceType, type, data, v.item, indentation, parentNames))
+        }
       }
 
       try {
@@ -153,7 +166,14 @@ function parseProperties(
     if (properties.item && Array.isArray(properties.item)) arr = properties.item
     if (arr.length) {
       interfaceList.push(
-        ...parseProperties(interfaceType, `${interfaceName}${toUp(properties.name)}`, data, arr, indentation)
+        ...parseProperties(
+          interfaceType,
+          `${interfaceName}${toUp(properties.name)}`,
+          data,
+          arr,
+          indentation,
+          parentNames
+        )
       )
     }
   } else if (typeof properties === 'string') {
