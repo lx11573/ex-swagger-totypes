@@ -94,7 +94,7 @@ export function parseSwaggerJson(
     if (responses) {
       const responseBody = responses[200] || {}
       try {
-        response = getSwaggerJsonRef(responseBody.schema, definitions)
+        response = getSwaggerJsonRef(responseBody.schema, definitions, [])
       } catch (error) {
         // DESC 将错误信息输出到 devTools 控制台, 避免记录过多日志.
         console.warn(responseBody.schema)
